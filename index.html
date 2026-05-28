@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>The Async Life Audit · Rialee Coaching</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<!-- Loading Jost as a free, close visual match for Futura.
+     For real Futura, replace this line with your Adobe Fonts kit:
+     <link rel="stylesheet" href="https://use.typekit.net/YOUR_KIT_ID.css" />
+     Then update the --font-display and --font-body variables below to "futura-pt" -->
+<link href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #f4ede2;
+    --bg-deep: #ebe1d1;
+    --ink: #1a1814;
+    --ink-soft: #4a4640;
+    --accent: #ff6b57;
+    --accent-deep: #d94a37;
+    --moss: #4a5d3a;
+    --paper: #fbf7ef;
+    --line: #2a2620;
+    --shadow: rgba(26, 24, 20, 0.08);
+    --font-display: 'Futura', 'futura-pt', 'Jost', sans-serif;
+    --font-body: 'Futura', 'futura-pt', 'Jost', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+  }
+
+  body {
+    background-image:
+      radial-gradient(circle at 15% 20%, rgba(255, 107, 87, 0.07) 0%, transparent 40%),
+      radial-gradient(circle at 85% 80%, rgba(74, 93, 58, 0.05) 0%, transparent 40%);
+  }
+
+  .grain {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.4;
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.08 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  }
+
+  .container {
+    position: relative;
+    z-index: 2;
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 60px 32px 80px;
+  }
+
+  /* ============ HEADER ============ */
+  .header {
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 24px;
+    margin-bottom: 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+
+  .brand {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 18px;
+    letter-spacing: -0.01em;
+  }
+
+  .brand em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .header-meta {
+    font-family: var(--font-body);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  /* ============ INTRO SCREEN ============ */
+  .intro {
+    animation: fadeUp 0.8s ease-out;
+  }
+
+  .intro.hidden { display: none; }
+
+  .eyebrow {
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 32px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .eyebrow::before {
+    content: '';
+    width: 28px;
+    height: 1px;
+    background: var(--accent);
+  }
+
+  .intro h1 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(42px, 6.5vw, 70px);
+    line-height: 1.02;
+    letter-spacing: -0.015em;
+    margin-bottom: 28px;
+  }
+
+  .intro h1 em {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--accent);
+  }
+
+  .intro-lede {
+    font-family: var(--font-display);
+    font-size: 22px;
+    line-height: 1.45;
+    color: var(--ink-soft);
+    margin-bottom: 40px;
+    max-width: 560px;
+    font-weight: 400;
+  }
+
+  .intro-meta {
+    display: flex;
+    gap: 40px;
+    margin-bottom: 48px;
+    padding: 24px 0;
+    border-top: 1px solid rgba(26, 24, 20, 0.15);
+    border-bottom: 1px solid rgba(26, 24, 20, 0.15);
+  }
+
+  .intro-meta-item { flex: 1; }
+
+  .intro-meta-label {
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 6px;
+  }
+
+  .intro-meta-value {
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 500;
+  }
+
+  .start-btn, .submit-btn {
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 18px 36px;
+    background: var(--ink);
+    color: var(--paper);
+    border: none;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .start-btn:hover, .submit-btn:hover {
+    background: var(--accent);
+    transform: translateY(-2px);
+  }
+
+  .submit-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+    background: var(--ink);
+  }
+
+  .start-btn .arrow, .submit-btn .arrow {
+    font-family: var(--font-display);
+    font-size: 18px;
+    font-style: italic;
+  }
+
+  /* ============ FORM SCREEN ============ */
+  .form-screen {
+    display: none;
+    animation: fadeUp 0.5s ease-out;
+  }
+
+  .form-screen.active { display: block; }
+
+  .form-screen h2 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(34px, 4.5vw, 50px);
+    line-height: 1.08;
+    letter-spacing: -0.015em;
+    margin-bottom: 20px;
+  }
+
+  .form-screen h2 em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .form-screen .form-lede {
+    font-family: var(--font-display);
+    font-size: 20px;
+    line-height: 1.5;
+    color: var(--ink-soft);
+    margin-bottom: 48px;
+    max-width: 540px;
+  }
+
+  .field-group-label {
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 48px 0 24px;
+    padding-top: 32px;
+    border-top: 1px solid rgba(26, 24, 20, 0.15);
+  }
+
+  .field-group-label.first {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: none;
+  }
+
+  .field {
+    margin-bottom: 28px;
+  }
+
+  .field-label {
+    display: block;
+    font-family: var(--font-display);
+    font-size: clamp(19px, 2.4vw, 24px);
+    font-weight: 400;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+    margin-bottom: 14px;
+  }
+
+  .field-label .q-num {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 14px;
+    color: var(--accent);
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  .field-hint {
+    font-size: 13px;
+    color: var(--ink-soft);
+    margin: -6px 0 14px;
+    font-style: italic;
+  }
+
+  .name-row {
+    display: flex;
+    gap: 16px;
+  }
+
+  .name-row .field { flex: 1; margin-bottom: 0; }
+
+  input[type="text"],
+  input[type="email"],
+  textarea {
+    width: 100%;
+    padding: 18px 20px;
+    background: var(--paper);
+    border: 1px solid rgba(26, 24, 20, 0.25);
+    font-family: var(--font-body);
+    font-size: 15px;
+    color: var(--ink);
+    outline: none;
+    transition: border-color 0.2s ease;
+    resize: vertical;
+  }
+
+  input:focus, textarea:focus { border-color: var(--ink); }
+
+  input::placeholder, textarea::placeholder { color: rgba(26, 24, 20, 0.4); }
+
+  textarea { min-height: 120px; line-height: 1.5; }
+  textarea.tall { min-height: 160px; }
+
+  .form-footer {
+    margin-top: 48px;
+    padding-top: 32px;
+    border-top: 1px solid rgba(26, 24, 20, 0.15);
+  }
+
+  .capture-meta {
+    font-size: 12px;
+    color: var(--ink-soft);
+    margin-top: 16px;
+    line-height: 1.5;
+  }
+
+  .error-text {
+    color: var(--accent-deep);
+    font-size: 13px;
+    margin-top: 12px;
+    display: none;
+  }
+
+  .error-text.show { display: block; }
+
+  /* ============ THANK YOU SCREEN ============ */
+  .thanks {
+    display: none;
+    animation: fadeUp 0.8s ease-out;
+    text-align: left;
+  }
+
+  .thanks.active { display: block; }
+
+  .thanks h1 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(40px, 6vw, 64px);
+    line-height: 1.04;
+    letter-spacing: -0.02em;
+    margin-bottom: 28px;
+  }
+
+  .thanks h1 em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .thanks p {
+    font-family: var(--font-display);
+    font-size: 20px;
+    line-height: 1.5;
+    color: var(--ink-soft);
+    max-width: 540px;
+    margin-bottom: 24px;
+  }
+
+  .thanks-signature {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 22px;
+    color: var(--ink);
+    margin-top: 40px;
+    font-weight: 500;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 600px) {
+    .container { padding: 40px 20px 60px; }
+    .intro-meta { flex-direction: column; gap: 20px; }
+    .name-row { flex-direction: column; gap: 0; }
+    .name-row .field { margin-bottom: 28px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="grain"></div>
+
+<div class="container">
+
+  <header class="header">
+    <div class="brand">Digital Nomad <em>Fitness</em></div>
+    <div class="header-meta">5 min only</div>
+  </header>
+
+  <!-- ============ INTRO ============ -->
+  <section class="intro" id="intro">
+    <div class="eyebrow">Your Async Life Audit</div>
+    <h1>Tell me the <em>truth</em><br />about your week.</h1>
+    <p class="intro-lede">
+      No quiz. No scores. Just you, being honest about where things really are. Fill it out and I'll read every word, then send you back something real.
+    </p>
+
+    <div class="intro-meta">
+      <div class="intro-meta-item">
+        <div class="intro-meta-label">Time</div>
+        <div class="intro-meta-value">5 minutes</div>
+      </div>
+      <div class="intro-meta-item">
+        <div class="intro-meta-label">Format</div>
+        <div class="intro-meta-value">6 questions</div>
+      </div>
+      <div class="intro-meta-item">
+        <div class="intro-meta-label">Result</div>
+        <div class="intro-meta-value">A reply from me</div>
+      </div>
+    </div>
+
+    <button class="start-btn" onclick="startAudit()">
+      Start the Audit <span class="arrow">→</span>
+    </button>
+  </section>
+
+  <!-- ============ FORM ============ -->
+  <section class="form-screen" id="formScreen">
+    <div class="eyebrow">The Audit</div>
+    <h2>Be <em>honest.</em> That's the whole point.</h2>
+    <p class="form-lede">The more real you are here, the more useful my reply will be. No one's grading you — I just need the truth.</p>
+
+    <!-- Identity -->
+    <div class="field-group-label first">Who you are</div>
+
+    <div class="name-row">
+      <div class="field">
+        <label class="field-label" for="firstName">First name</label>
+        <input type="text" id="firstName" placeholder="First name" />
+      </div>
+      <div class="field">
+        <label class="field-label" for="lastName">Last name</label>
+        <input type="text" id="lastName" placeholder="Last name" />
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="field-label" for="email">Email address</label>
+      <input type="email" id="email" placeholder="you@email.com" />
+    </div>
+
+    <!-- The audit -->
+    <div class="field-group-label">The real stuff</div>
+
+    <div class="field">
+      <label class="field-label" for="q_goal"><span class="q-num">Question 01</span>What is your biggest fitness goal right now?</label>
+      <textarea id="q_goal" placeholder="The one thing you actually want..."></textarea>
+    </div>
+
+    <div class="field">
+      <label class="field-label" for="q_struggle"><span class="q-num">Question 02</span>What is your biggest struggle?</label>
+      <textarea id="q_struggle" placeholder="The thing that keeps getting in the way..."></textarea>
+    </div>
+
+    <div class="field">
+      <label class="field-label" for="q_food"><span class="q-num">Question 03</span>Explain everything you ate yesterday.</label>
+      <div class="field-hint">No cheating. Every snack, every coffee, every bite.</div>
+      <textarea id="q_food" class="tall" placeholder="Morning to night — all of it..."></textarea>
+    </div>
+
+    <div class="field">
+      <label class="field-label" for="q_sleep"><span class="q-num">Question 04</span>How many hours of sleep did you get each night this past week?</label>
+      <div class="field-hint">No cheating. Roughly per night, or list the week out.</div>
+      <textarea id="q_sleep" placeholder="e.g. Mon 6, Tue 5, Wed 7..."></textarea>
+    </div>
+
+    <div class="field">
+      <label class="field-label" for="q_steps"><span class="q-num">Question 05</span>Open your health app right now. What's your average daily steps?</label>
+      <div class="field-hint">No cheating — go look. Whatever it says.</div>
+      <input type="text" id="q_steps" placeholder="e.g. 4,200 steps/day" />
+    </div>
+
+    <div class="field">
+      <label class="field-label" for="q_ask"><span class="q-num">Question 06</span>Ask me anything you'd like.</label>
+      <div class="field-hint">Anything at all — about training, food, travel, mindset, whatever's on your mind.</div>
+      <textarea id="q_ask" class="tall" placeholder="What do you want to know?"></textarea>
+    </div>
+
+    <div class="form-footer">
+      <button class="submit-btn" id="submitBtn" onclick="submitAudit()">
+        Send My Audit <span class="arrow">→</span>
+      </button>
+      <p class="error-text" id="errorText">Please add your first name and a valid email so I can reply.</p>
+      <p class="capture-meta">No spam. Just my reply to your audit + occasional notes on nomad fitness. Unsubscribe anytime.</p>
+    </div>
+  </section>
+
+  <!-- ============ THANK YOU ============ -->
+  <section class="thanks" id="thanks">
+    <div class="eyebrow">Got it</div>
+    <h1>Your audit is <em>in.</em></h1>
+    <p>I read these myself — every single one. Keep an eye on your inbox over the next few days. I'll come back to you with something real, not a template.</p>
+    <p>In the meantime: pick the one honest thing you wrote above and do it a little better today. That's how this works.</p>
+    <div class="thanks-signature">— Rialee</div>
+  </section>
+
+</div>
+
+<script>
+  // ============ CONFIG ============
+  // Paste your Zapier webhook URL here once you have it.
+  const ZAPIER_WEBHOOK_URL = "TBD";
+
+  // ============ NAVIGATION ============
+  function startAudit() {
+    document.getElementById('intro').classList.add('hidden');
+    document.getElementById('formScreen').classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function val(id) {
+    return document.getElementById(id).value.trim();
+  }
+
+  async function submitAudit() {
+    const firstName = val('firstName');
+    const email = val('email');
+    const errorEl = document.getElementById('errorText');
+
+    if (!firstName || !email || !email.includes('@')) {
+      errorEl.classList.add('show');
+      window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+      return;
+    }
+    errorEl.classList.remove('show');
+
+    const payload = {
+      email: email,
+      first_name: firstName,
+      last_name: val('lastName'),
+      fitness_goal: val('q_goal'),
+      biggest_struggle: val('q_struggle'),
+      food_yesterday: val('q_food'),
+      sleep_past_week: val('q_sleep'),
+      average_steps: val('q_steps'),
+      ask_me_anything: val('q_ask'),
+      submitted_at: new Date().toISOString()
+    };
+
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = true;
+    btn.innerHTML = 'Sending… <span class="arrow">→</span>';
+
+    try {
+      if (ZAPIER_WEBHOOK_URL && ZAPIER_WEBHOOK_URL !== "TBD") {
+        await fetch(ZAPIER_WEBHOOK_URL, {
+          method: 'POST',
+          // no-cors avoids CORS errors with Zapier catch hooks;
+          // the request still reaches Zapier successfully.
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+      } else {
+        console.log('Webhook URL not set yet. Payload:', payload);
+      }
+      showThanks();
+    } catch (err) {
+      console.error('Submit error:', err);
+      // Still show thanks so the user isn't blocked; data is logged above.
+      showThanks();
+    }
+  }
+
+  function showThanks() {
+    document.getElementById('formScreen').classList.remove('active');
+    document.getElementById('thanks').classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+</script>
+
+</body>
+</html>
